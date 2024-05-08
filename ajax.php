@@ -29,7 +29,7 @@ function RequestGeneralPostMail(){
 
       $mailForm->setTo( get_field('email_form', 'option') ); // bussness
       $mailForm->setReplyTo($_POST['dataUser']['email']); // customer
-      $mailForm->setFrom(['Idraulicatrento', 'noreply@idraulicatrento.it']); // server
+      $mailForm->setFrom(['Sito-Cliente', 'noreply@sito-cliente.it']); // server
       $mailForm->setTemplate( file_get_contents( get_template_directory() . '/assets/html/preventivo.html'));
       $mailForm->setSubject('Nuova richiesta dal sito idraulicatrento.it');
       $meta = [
