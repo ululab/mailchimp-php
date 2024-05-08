@@ -61,107 +61,14 @@ add_action( 'wp_enqueue_scripts', 'to_include_custom_scripts' );
 --------------------------------------------------*/
 	require ASSETS_DIR . '/php/custom-post-type-taxonomy.php';
 
-/*--------------------------------------------------
-	OPTIONS
---------------------------------------------------*/
-function pbr($e){echo '<br><pre>';print_r($e);echo '</pre><br>';}
 
-if ( function_exists('acf_add_options_page') ) {
- acf_add_options_page([
-   'page_title' 	=> 'Bagno Showroom',
-   'menu_title'	=> 'Bagno Showroom',
-   'menu_slug' 	=> 'bsr-options',
-   'capability'	=> 'edit_posts',
-   'redirect'		=> true
- ]);
-}
-
-
-// acf_add_options_sub_page(array(
-//   'page_title' 	=> 'Bagno Showroom',
-//   'menu_title'	=> 'Aspetto',
-//   'parent_slug'	=> 'bsr-options',
-// ));
 /*--------------------------------------------------
 	SUPPORTO DEL RIASSUNTO NELLE PAGINE - WP Backend
 --------------------------------------------------*/
 add_post_type_support( 'page', 'excerpt' );
 
-/*--------------------------------------------
-		GALLERY - IMAGES
---------------------------------------------*/
-function get_gallery_page_by_acf_field($slug, $page) {
-
-	$gallery = get_field($slug, $page);
-
-	$url_image = [];
-
-	foreach ($gallery as $key => $image) {
-		$url_image[$image['ID']] = [
-			'original' 	=> $image['link'],
-			'thumbnail' => $image['sizes']['thumbnail'],
-			'medium' 		=> $image['sizes']['medium'],
-			'large' 		=> $image['sizes']['large'],
-		];
-	}
-
-	return $url_image;
-
-}
-
-/*--------------------------------------------
-		IMAGES MENU - THUMBNAIL
---------------------------------------------*/
-function get_images_menu() {
-
-	$page = [];
-	$menu_items = wp_get_nav_menu_items('menu-1');
-
-	foreach ($menu_items as $key => $item) {
-		if ($item->object != 'custom') {
-			$page[] = $item;
-		}
-	}
-
-	foreach ($page as $item ) :
-		$post = get_post($item->object_id);
-		// the_field('image_menu', $id);
-		// post_excerpt, post_content
-	?>
-		<div class="wrap_attachment_menu" data-id="menu-item-<?php echo $item->ID ?>">
-			<div class="wrap_image">
-				<img src="<?php echo get_the_post_thumbnail_url($post->ID, 'large') ?>" >
-			</div>
-
-			<div class="wrap_titles">
-	     <h3 class="the_sub_title title_1_2"><?php echo $post->post_title; ?></h3>
-			 <div class="description"><?php echo ($post->post_excerpt) ? $post->post_excerpt : $post->post_content; ?></div>
-	    </div>
-		</div>
-
-	<?php endforeach; ?>
-
-		<div class="wrap_layer_withe"></div>
-
-<?php
-
-}
 
 /*--------------------------------------------
 	Excerpt or Content post
-----------------------------------------------*/
-
-function get_excerpt_or_content($post, $trunc = 100) {
-	if ($post->post_excerpt) {
-		return $post->post_excerpt;
-	} else {
-		return substr($post->post_content, 0, $trunc);
-	}
-}
-
-/*--------------------------------------------
-
-	Excerpt or Content post
-
 ----------------------------------------------*/
 require ASSETS_DIR . '/php/ajax.php';
